@@ -1,0 +1,31 @@
+\docType{data}
+\name{friedman2}
+\alias{friedman2}
+\title{Benchmark Problem Friedman 2}
+\format{A data frame with 100 rows and 5 variables}
+\source{
+  \url{http://cran.r-project.org/web/packages/mlbench/index.html}
+}
+\description{
+  Dataset taken from \pkg{mlbench}. The inputs are 4
+  independent variables uniformly distributed over the
+  ranges \deqn{0 \le x1 \le 100} \deqn{40 \pi \le x2 \le
+  560 \pi} \deqn{0 \le x3 \le 1} \deqn{1 \le x4 \le 11} The
+  outputs are created according to the formula \deqn{y =
+  (x1^2 + (x2 x3 - (1/(x2 x4)))^2)^{0.5} + e} where
+  \emph{e} is \eqn{N(0,sd)}.
+}
+\references{
+  Breiman, Leo (1996) Bagging predictors. Machine Learning
+  24, pages 123-140.
+
+  Friedman, Jerome H. (1991) Multivariate adaptive
+  regression splines. The Annals of Statistics 19 (1),
+  pages 1-67.
+
+  Friedrich Leisch & Evgenia Dimitriadou (2010). mlbench:
+  Machine Learning Benchmark Problems. R package version
+  2.1-1.
+}
+\keyword{datasets}
+

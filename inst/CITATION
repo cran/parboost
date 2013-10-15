@@ -1,0 +1,18 @@
+citHeader("To cite package 'parboost' in publications use:")
+
+desc <- packageDescription("parboost")
+year <- sub("(2[[:digit:]]{3})-.*-.*", "\\1", desc$Date)
+vers <- paste("R package version", desc$Version)
+
+citEntry(entry="Manual",
+         title = "Distributed Model-Based Boosting",
+         author = personList(as.person("Ronert Obst")),
+         year = year,
+         note = vers,
+         url = "http://CRAN.R-project.org/package=parboost",
+         textVersion =
+         paste("R. Obst (",
+               year,
+               "). parboost: Distributed Model-Based Boosting, ",
+               vers, ", http://CRAN.R-project.org/package=parboost", ".",
+               sep=""))

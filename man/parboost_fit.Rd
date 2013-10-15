@@ -1,0 +1,63 @@
+\name{parboost_fit}
+\alias{parboost_fit}
+\title{Fit individual parboost component using mboost}
+\usage{
+  parboost_fit(subsample_indices, data = NULL,
+    path_to_data, data_import_function, preprocessing,
+    seed, formula, baselearner, family, control,
+    tree_controls, cv, cores_cv = detectCores(), folds,
+    stepsize_mstop)
+}
+\arguments{
+  \item{subsample_indices}{A numeric vector containing the
+  indices of the subsample}
+
+  \item{data}{A data frame containing the variables in the
+  model. It is recommended to use path_to_data instead for
+  IO efficiency. Defaults to NULL}
+
+  \item{path_to_data}{A string with the path to the data.}
+
+  \item{data_import_function}{What function should be used
+  to import the data?}
+
+  \item{preprocessing}{Optional preprocessing function to
+  apply to the data passed from parboost}
+
+  \item{seed}{Set a seed for reproducible results.}
+
+  \item{formula}{Formula for mboost.}
+
+  \item{baselearner}{Character string determining the type
+  of base learner.}
+
+  \item{family}{mboost family}
+
+  \item{control}{mboost control}
+
+  \item{tree_controls}{party control}
+
+  \item{cv}{Cross-validate?}
+
+  \item{cores_cv}{Number of cores to use during cv.}
+
+  \item{folds}{Number of folds to use for cv.}
+
+  \item{stepsize_mstop}{Stepsize used for optimizing
+  mstop.}
+}
+\value{
+  The fitted submodel and its predictions
+}
+\description{
+  Internal function to fit mboost model on a subset of the
+  data
+}
+\details{
+  Fits a mboost model on each subset of the data
+}
+\author{
+  Ronert Obst
+}
+\keyword{internal}
+

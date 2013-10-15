@@ -1,0 +1,16 @@
+The parboost package implements distributed gradient boosting based on 
+the \pkg{mboost} package. When should you use parboost instead of mboost?
+There are two use cases: 
+1. The data takes too long to fit as a whole
+2. You want to bag and postprocess your boosting models to get a
+    more robust ensemble
+
+parboost is designed to scale up component-wise functional gradient
+boosting in a distributed memory environment by splitting the
+observations into disjoint subsets. Alternatively, parboost can
+generate and use bootstrap samples of the original data. Each cluster
+node then fits a boosting model to its subset of the data. These
+boosting models are combined in an ensemble, either with equal
+weights, or by fitting a (penalized) regression model on the
+predictions of the individual models on the complete data. All other
+functionality of mboost is left untouched for the moment.

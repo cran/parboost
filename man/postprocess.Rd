@@ -1,0 +1,32 @@
+\name{postprocess}
+\alias{postprocess}
+\title{Postprocess parboost ensemble components}
+\usage{
+  postprocess(response, family, list_of_models,
+    postprocessing, cores_cv = detectCores())
+}
+\arguments{
+  \item{response}{The response vector.}
+
+  \item{family}{Boosting family.}
+
+  \item{list_of_models}{List of submodels.}
+
+  \item{postprocessing}{Type of postprocessing.}
+}
+\value{
+  Predictions of postprocessed ensemble and a list of
+  mboost models
+}
+\description{
+  Postprocess the submodels
+}
+\details{
+  Either euqally weigh all submodels or perform (penalized)
+  regression on them to determine the weights.
+}
+\author{
+  Ronert Obst
+}
+\keyword{internal}
+

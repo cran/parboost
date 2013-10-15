@@ -1,0 +1,204 @@
+\docType{package}
+\name{parboost}
+\alias{parboost}
+\alias{parboost-package}
+\title{Distributed gradient boosting based on the \pkg{mboost} package.}
+\usage{
+  parboost(cluster_object = NULL, mc.cores = NULL,
+    data = NULL, path_to_data = "",
+    data_import_function = NULL,
+    split_data = c("disjoint", "bagging"), nsplits,
+    preprocessing = NULL, seed = NULL, formula,
+    baselearner = c("bbs", "bols", "btree", "bss", "bns"),
+    family = c("gaussian", "binomial", "poisson"),
+    control = boost_control(), tree_controls = NULL,
+    cv = TRUE, cores_cv = detectCores(), folds = 8,
+    stepsize_mstop = 1,
+    postprocessing = c("none", "glm", "lasso", "ridge", "elasticnet"))
+}
+\arguments{
+  \item{cluster_object}{Cluster object from the
+  \pkg{parallel} package to carry out distributed
+  computations.}
+
+  \item{mc.cores}{If not \code{NULL}, \code{parboost} uses
+  mclapply for shared memory parallelism.}
+
+  \item{data}{A data frame containing the variables in the
+  model. It is recommended to use path_to_data instead for
+  IO efficiency. Defaults to NULL}
+
+  \item{path_to_data}{A string pointing to the location of
+  the data. \code{parboost} assumes that the data is
+  located at the same location on every cluster node. This
+  parameter is ignored if you pass a data frame to the data
+  argument.}
+
+  \item{data_import_function}{Function used to import data.
+  Defaults to \code{read.csv}. This parameter is ignored if
+  you pass a data frame to the data argument.}
+
+  \item{split_data}{String determening the way the data
+  should be split. \code{disjoint} splits the data into
+  disjoint subsets. \code{bootstrap} draws a bootstrap
+  sample instead.}
+
+  \item{nsplits}{Integer determining the number of disjoint
+  sets the data should be split into. If \code{split_data}
+  is set to \code{bootstrap}, \code{nsplits} determines the
+  number of bootstrap samples.}
+
+  \item{preprocessing}{Optional preprocessing function to
+  apply to the data. This is useful if you cannot modify
+  the data on the cluster nodes.}
+
+  \item{seed}{Integer determining the random seed value for
+  reproducible results.}
+
+  \item{formula}{Formula to be passed to mboost.}
+
+  \item{baselearner}{Character string to determine the type
+  of baselearner to be used for boosting. See
+  \code{\link[mboost]{mboost}} for details.}
+
+  \item{family}{A string determining the family. Currently
+  gaussian, binomial and poisson are implemented.}
+
+  \item{control}{An object of type \code{boost_control} for
+  controlling \code{\link[mboost]{mboost}}.  See
+  \code{\link[mboost]{boost_control}} in the
+  \code{\link{mboost}} for details.}
+
+  \item{tree_controls}{Optional object of type
+  \code{TreeControl}. See \code{ctree_control} in the
+  \code{party} documentation for detailos. Used to set
+  hyperparameters for tree base learners.}
+
+  \item{cv}{Logical to activate crossvalidation to
+  determine \eqn{m_{stop}}. Defaults to \code{TRUE}.}
+
+  \item{cores_cv}{Integer determining the number of CPU
+  cores used for cross-validation on each node (or
+  locally). Defaults to maximum available using
+  \code{\link[parallel]{detectCores}}.}
+
+  \item{folds}{Integer determening the number of folds used
+  during cross-validation on each cluster node. Defaults to
+  8. It is computationally more efficient to set the value
+  of of folds to a multiple of the number of cores on each
+  cluster node.}
+
+  \item{stepsize_mstop}{Integer denoting the stepsize used
+  during cross-validation for tuning the value of
+  \eqn{m_{stop}}.}
+
+  \item{postprocessing}{String to set the type of
+  postprocessing. Defaults to \code{"none"} for a simple
+  average of the ensemble components.}
+}
+\value{
+  An object of type \code{parboost} with \code{print},
+  \code{summary}, \code{predict}, \code{coef} and
+  \code{selected} methods.
+}
+\description{
+  Distributed gradient boosting based on the \pkg{mboost}
+  package. Gaussian, Binomial and Poisson families are
+  currently supported.
+
+  The parboost package implements distributed gradient
+  boosting based on the \pkg{mboost} package. When should
+  you use parboost instead of mboost? There are two use
+  cases: 1. The data takes too long to fit as a whole 2.
+  You want to bag and postprocess your boosting models to
+  get a more robust ensemble parboost is designed to scale
+  up component-wise functional gradient boosting in a
+  distributed memory environment by splitting the
+  observations into disjoint subsets. Alternatively,
+  parboost can generate and use bootstrap samples of the
+  original data. Each cluster node then fits a boosting
+  model to its subset of the data. These boosting models
+  are combined in an ensemble, either with equal weights,
+  or by fitting a (penalized) regression model on the
+  predictions of the individual models on the complete
+  data. All other functionality of mboost is left untouched
+  for the moment.
+}
+\details{
+  Generally gradient boosting offers more flexibility and
+  better predictive performance than random forests, but is
+  usually not used for large data sets because of its
+  iterative nature. \code{parboost} is designed to scale up
+  component-wise functional gradient boosting in a
+  distributed memory environment by splitting the
+  observations into disjoint subsets, or alternatively by
+  bootstrapping the original data. Each cluster node then
+  fits a boosting model to its subset of the data. These
+  boosting models are combined in an ensemble, either with
+  equal weights, or by fitting a (penalized) regression
+  model on the predictions of the individual models on the
+  complete data. The motivation behind \code{parboost} is
+  to offer a boosting framework that is as easy to
+  parallelize and thus scalable as random forests.
+
+  If you want to modify the boosting parameters, please
+  take a look at the \code{\link{mboost}} package
+  documentation and pass the appropriate parameters to
+  \code{tree_control} and \code{boost_control}.
+}
+\examples{
+## Run parboost on a cluster
+data(friedman2)
+library(parallel)
+cl <- makeCluster(2)
+parboost_model <- parboost(cluster_object = cl, data = friedman2,
+                           nsplits = 2, formula = y ~ .,
+                           baselearner="bbs", postprocessing = "glm",
+                           control = boost_control(mstop=10))
+stopCluster(cl)
+print(parboost_model)
+summary(parboost_model)
+head(predict(parboost_model))
+
+## Run parboost serially for testing/debugging purposes
+parboost_model <- parboost(data = friedman2, nsplits = 2, formula
+= y ~ ., baselearner="bbs", postprocessing = "glm", control =
+boost_control(mstop=10))
+}
+\author{
+  Ronert Obst
+}
+\references{
+  Peter Buehlmann and Bin Yu (2003), Boosting with the L2
+  loss: regression and classification. \emph{Journal of the
+  American Statistical Association}, \bold{98}, 324--339.
+
+  Peter Buehlmann and Torsten Hothorn (2007), Boosting
+  algorithms: regularization, prediction and model fitting.
+  \emph{Statistical Science}, \bold{22}(4), 477--505.
+
+  Torsten Hothorn, Peter Buehlmann, Thomas Kneib, Mattthias
+  Schmid and Benjamin Hofner (2010), Model-based Boosting
+  2.0. \emph{Journal of Machine Learning Research},
+  \bold{11}, 2109--2113.
+
+  Yoav Freund and Robert E. Schapire (1996), Experiments
+  with a new boosting algorithm. In \emph{Machine Learning:
+  Proc. Thirteenth International Conference}, 148--156.
+
+  Jerome H. Friedman (2001), Greedy function approximation:
+  A gradient boosting machine. \emph{The Annals of
+  Statistics}, \bold{29}, 1189--1232.
+
+  Benjamin Hofner, Andreas Mayr, Nikolay Robinzonov and
+  Matthias Schmid (2012). Model-based Boosting in R: A
+  Hands-on Tutorial Using the R Package mboost.
+  \emph{Department of Statistics, Technical Report No.
+  120}.\cr \url{http://epub.ub.uni-muenchen.de/12754/}
+
+  T. Hothorn, P. Buehlmann, T. Kneib, M. Schmid, and B.
+  Hofner (2013). mboost: Model-Based Boosting, R package
+  version 2.2-3,
+  \url{http://CRAN.R-project.org/package=mboost}.
+}
+
