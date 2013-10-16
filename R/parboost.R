@@ -156,7 +156,8 @@ parboost <- function(cluster_object=NULL, mc.cores=NULL, data=NULL, path_to_data
         list_of_models <- lapply(X = list_of_subsample_indices, parboost_fit, data,
                                  path_to_data, data_import_function, preprocessing, seed,
                                  formula, baselearner, family, control, tree_controls, cv, cores_cv = cores_cv, folds, stepsize_mstop)
-    } else if (is.null(cluster_object) && !is.null(mc.cores)) {
+    } else if (is.null(cluster_object) && !is.null(mc.cores) &&
+               Sys.info()[1] != "Windows") {
         list_of_models <- mclapply(X = list_of_subsample_indices, parboost_fit, data,
                                    path_to_data, data_import_function, preprocessing, seed,
                                    formula, baselearner, family, control, tree_controls, cv, cores_cv = cores_cv, folds, stepsize_mstop, mc.cores = mc.cores)

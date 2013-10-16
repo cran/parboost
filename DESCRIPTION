@@ -1,7 +1,7 @@
 Package: parboost
 Title: Distributed Model-Based Boosting
-Version: 0.1.1
-Date: 2013-10-15
+Version: 0.1.2
+Date: 2013-10-16
 Description: Distributed gradient boosting based on the mboost package. The
     parboost package is designed to scale up component-wise functional
     gradient boosting in a distributed memory environment by splitting the
@@ -14,11 +14,11 @@ Description: Distributed gradient boosting based on the mboost package. The
 Author: Ronert Obst <ronert.obst@gmail.com>
 Maintainer: Ronert Obst <ronert.obst@gmail.com>
 Depends: R (>= 3.0.1), parallel, mboost, party, iterators
-Imports: plyr, caret, glmnet, doMC
+Imports: plyr, caret, glmnet, doParallel
 License: GPL-2
 Collate: 'crossvalidation.R' 'methods.R' 'parboost.R' 'postprocess.R'
         'parboost-package.R'
-Packaged: 2013-10-16 08:07:40 UTC; ronert
+Packaged: 2013-10-16 19:49:25 UTC; ronert
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-10-16 11:35:27
+Date/Publication: 2013-10-17 23:28:22

@@ -16,7 +16,7 @@ postprocess <- function(response, family, list_of_models, postprocessing, cores_
 
     predictions <- t(laply(predictions, function(x) x))
 
-    registerDoMC(cores_cv)
+    if (Sys.info()[1] != "Windows") registerDoParallel(cores = cores_cv)
 
     none <- function(predictions) {
         ### simple mean of the subsample models

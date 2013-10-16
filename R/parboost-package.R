@@ -19,7 +19,7 @@
 ##' @name parboost
 ##' @docType package
 ##' @import parallel iterators
-##' @importFrom doMC registerDoMC
+##' @importFrom doParallel registerDoParallel
 ##' @importFrom glmnet cv.glmnet
 ##' @importFrom mboost mboost blackboost selected
 ##' @importFrom plyr laply

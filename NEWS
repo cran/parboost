@@ -7,3 +7,9 @@ parboost 0.1.1
 ===========
 
 * Minor changes to confirm with CRAN policies
+
+parboost 0.1.2
+===========
+
+* Added Windows compatibility by exchanging doMC
+  with doParallel

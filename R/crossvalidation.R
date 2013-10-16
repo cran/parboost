@@ -34,9 +34,16 @@ cv_subsample <- function(object, folds, grid = 1:mstop(object), cores_cv = detec
 
     OOBweights <- matrix(rep(weights, ncol(folds)), ncol = ncol(folds))
     OOBweights[folds > 0] <- 0 # inverse of folds
-    oobrisk <- mclapply(1:ncol(folds),
-                        function(i) dummyfct(weights = folds[, i],
-                                             oobweights = OOBweights[, i]), mc.cores = detectCores())
+    if (Sys.info()[1] != "Windows") {
+        oobrisk <- mclapply(1:ncol(folds),
+                            function(i) dummyfct(weights = folds[, i],
+                                                 oobweights = OOBweights[,
+                                                     i]), mc.cores = cores_cv)
+    } else {
+            oobrisk <- lapply(1:ncol(folds),
+                            function(i) dummyfct(weights = folds[, i],
+                                                 oobweights = OOBweights[, i]))
+    }
 
     ## get errors if mclapply is used
     if (any(idx <- sapply(oobrisk, is.character)))
