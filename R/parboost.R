@@ -78,23 +78,23 @@
 ##' @return An object of type \code{parboost} with \code{print},
 ##' \code{summary}, \code{predict}, \code{coef} and \code{selected} methods.
 ##' @author Ronert Obst
-##' @examples ## Run parboost on a cluster
-##' data(friedman2)
-##' library(parallel)
-##' cl <- makeCluster(2)
-##' parboost_model <- parboost(cluster_object = cl, data = friedman2,
-##'                            nsplits = 2, formula = y ~ .,
-##'                            baselearner="bbs", postprocessing = "glm",
-##'                            control = boost_control(mstop=10))
-##' stopCluster(cl)
-##' print(parboost_model)
-##' summary(parboost_model)
-##' head(predict(parboost_model))
-##'
-##' ## Run parboost serially for testing/debugging purposes
-##' parboost_model <- parboost(data = friedman2, nsplits = 2, formula
-##' = y ~ ., baselearner="bbs", postprocessing = "glm", control =
-##' boost_control(mstop=10))
+##' @examples ## Run parboost on a cluster (example not run)
+##' # data(friedman2)
+##' # library(parallel)
+##' # cl <- makeCluster(2)
+##' # parboost_model <- parboost(cluster_object = cl, data = friedman2,
+##' #                            nsplits = 2, formula = y ~ .,
+##' #                            baselearner="bbs", postprocessing = "glm",
+##' #                            control = boost_control(mstop=10))
+##' # stopCluster(cl)
+##' # print(parboost_model)
+##' # summary(parboost_model)
+##' # head(predict(parboost_model))
+##' #
+##' # ## Run parboost serially for testing/debugging purposes
+##' # parboost_model <- parboost(data = friedman2, nsplits = 2, formula
+##' # = y ~ ., baselearner="bbs", postprocessing = "glm", control =
+##' # boost_control(mstop=10))
 ##' @export
 parboost <- function(cluster_object=NULL, mc.cores=NULL, data=NULL, path_to_data="",
                      data_import_function = NULL,

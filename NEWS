@@ -13,3 +13,9 @@ parboost 0.1.2
 
 * Added Windows compatibility by exchanging doMC
   with doParallel
+
+parboost 0.1.3
+===========
+
+* Complying with CRAN policy to not use more than
+  two cores for examples

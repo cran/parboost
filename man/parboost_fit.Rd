@@ -2,11 +2,9 @@
 \alias{parboost_fit}
 \title{Fit individual parboost component using mboost}
 \usage{
-  parboost_fit(subsample_indices, data = NULL,
-    path_to_data, data_import_function, preprocessing,
-    seed, formula, baselearner, family, control,
-    tree_controls, cv, cores_cv = detectCores(), folds,
-    stepsize_mstop)
+parboost_fit(subsample_indices, data = NULL, path_to_data,
+  data_import_function, preprocessing, seed, formula, baselearner, family,
+  control, tree_controls, cv, cores_cv = detectCores(), folds, stepsize_mstop)
 }
 \arguments{
   \item{subsample_indices}{A numeric vector containing the
@@ -47,17 +45,17 @@
   mstop.}
 }
 \value{
-  The fitted submodel and its predictions
+The fitted submodel and its predictions
 }
 \description{
-  Internal function to fit mboost model on a subset of the
-  data
+Internal function to fit mboost model on a subset of the
+data
 }
 \details{
-  Fits a mboost model on each subset of the data
+Fits a mboost model on each subset of the data
 }
 \author{
-  Ronert Obst
+Ronert Obst
 }
 \keyword{internal}
 

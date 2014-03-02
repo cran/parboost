@@ -3,8 +3,8 @@
 \title{Print coefficients for base learners with a notion of
 coefficients}
 \usage{
-  \method{coef}{parboost} (object, which = NULL,
-    aggregate = c("sum", "cumsum", "none"), ...)
+\method{coef}{parboost}(object, which = NULL, aggregate = c("sum", "cumsum",
+  "none"), ...)
 }
 \arguments{
   \item{object}{Object of class parboost.}
@@ -26,23 +26,23 @@ coefficients}
   \item{...}{Additional arguements passed to callies.}
 }
 \value{
-  Returns a list of coefficients
+Returns a list of coefficients
 }
 \description{
-  Extract coefficients from base learners that have a
-  notion of coefficients
+Extract coefficients from base learners that have a notion
+of coefficients
 }
 \details{
-  Extract the coefficients of base learners which have a
-  notion of coefficients from each boosting model. Weighs
-  the coefficients by the postprocessed submodel weights.
+Extract the coefficients of base learners which have a
+notion of coefficients from each boosting model. Weighs the
+coefficients by the postprocessed submodel weights.
 }
 \author{
-  Ronert Obst
+Ronert Obst
 }
 \references{
-  T. Hothorn, P. Buehlmann, T. Kneib, M. Schmid, and B.
-  Hofner (2013). mboost: Model-Based Boosting, R package
-  version 2.2-3, http://CRAN.R-project.org/package=mboost.
+T. Hothorn, P. Buehlmann, T. Kneib, M. Schmid, and B.
+Hofner (2013). mboost: Model-Based Boosting, R package
+version 2.2-3, http://CRAN.R-project.org/package=mboost.
 }
 

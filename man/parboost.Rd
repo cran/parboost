@@ -4,17 +4,14 @@
 \alias{parboost-package}
 \title{Distributed gradient boosting based on the \pkg{mboost} package.}
 \usage{
-  parboost(cluster_object = NULL, mc.cores = NULL,
-    data = NULL, path_to_data = "",
-    data_import_function = NULL,
-    split_data = c("disjoint", "bagging"), nsplits,
-    preprocessing = NULL, seed = NULL, formula,
-    baselearner = c("bbs", "bols", "btree", "bss", "bns"),
-    family = c("gaussian", "binomial", "poisson"),
-    control = boost_control(), tree_controls = NULL,
-    cv = TRUE, cores_cv = detectCores(), folds = 8,
-    stepsize_mstop = 1,
-    postprocessing = c("none", "glm", "lasso", "ridge", "elasticnet"))
+parboost(cluster_object = NULL, mc.cores = NULL, data = NULL,
+  path_to_data = "", data_import_function = NULL,
+  split_data = c("disjoint", "bagging"), nsplits, preprocessing = NULL,
+  seed = NULL, formula, baselearner = c("bbs", "bols", "btree", "bss",
+  "bns"), family = c("gaussian", "binomial", "poisson"),
+  control = boost_control(), tree_controls = NULL, cv = TRUE,
+  cores_cv = detectCores(), folds = 8, stepsize_mstop = 1,
+  postprocessing = c("none", "glm", "lasso", "ridge", "elasticnet"))
 }
 \arguments{
   \item{cluster_object}{Cluster object from the
@@ -97,108 +94,107 @@
   average of the ensemble components.}
 }
 \value{
-  An object of type \code{parboost} with \code{print},
-  \code{summary}, \code{predict}, \code{coef} and
-  \code{selected} methods.
+An object of type \code{parboost} with \code{print},
+\code{summary}, \code{predict}, \code{coef} and
+\code{selected} methods.
 }
 \description{
-  Distributed gradient boosting based on the \pkg{mboost}
-  package. Gaussian, Binomial and Poisson families are
-  currently supported.
+The parboost package implements distributed gradient
+boosting based on the \pkg{mboost} package. When should you
+use parboost instead of mboost? There are two use cases: 1.
+The data takes too long to fit as a whole 2. You want to
+bag and postprocess your boosting models to get a more
+robust ensemble parboost is designed to scale up
+component-wise functional gradient boosting in a
+distributed memory environment by splitting the
+observations into disjoint subsets. Alternatively, parboost
+can generate and use bootstrap samples of the original
+data. Each cluster node then fits a boosting model to its
+subset of the data. These boosting models are combined in
+an ensemble, either with equal weights, or by fitting a
+(penalized) regression model on the predictions of the
+individual models on the complete data. All other
+functionality of mboost is left untouched for the moment.
 
-  The parboost package implements distributed gradient
-  boosting based on the \pkg{mboost} package. When should
-  you use parboost instead of mboost? There are two use
-  cases: 1. The data takes too long to fit as a whole 2.
-  You want to bag and postprocess your boosting models to
-  get a more robust ensemble parboost is designed to scale
-  up component-wise functional gradient boosting in a
-  distributed memory environment by splitting the
-  observations into disjoint subsets. Alternatively,
-  parboost can generate and use bootstrap samples of the
-  original data. Each cluster node then fits a boosting
-  model to its subset of the data. These boosting models
-  are combined in an ensemble, either with equal weights,
-  or by fitting a (penalized) regression model on the
-  predictions of the individual models on the complete
-  data. All other functionality of mboost is left untouched
-  for the moment.
+Distributed gradient boosting based on the \pkg{mboost}
+package. Gaussian, Binomial and Poisson families are
+currently supported.
 }
 \details{
-  Generally gradient boosting offers more flexibility and
-  better predictive performance than random forests, but is
-  usually not used for large data sets because of its
-  iterative nature. \code{parboost} is designed to scale up
-  component-wise functional gradient boosting in a
-  distributed memory environment by splitting the
-  observations into disjoint subsets, or alternatively by
-  bootstrapping the original data. Each cluster node then
-  fits a boosting model to its subset of the data. These
-  boosting models are combined in an ensemble, either with
-  equal weights, or by fitting a (penalized) regression
-  model on the predictions of the individual models on the
-  complete data. The motivation behind \code{parboost} is
-  to offer a boosting framework that is as easy to
-  parallelize and thus scalable as random forests.
+Generally gradient boosting offers more flexibility and
+better predictive performance than random forests, but is
+usually not used for large data sets because of its
+iterative nature. \code{parboost} is designed to scale up
+component-wise functional gradient boosting in a
+distributed memory environment by splitting the
+observations into disjoint subsets, or alternatively by
+bootstrapping the original data. Each cluster node then
+fits a boosting model to its subset of the data. These
+boosting models are combined in an ensemble, either with
+equal weights, or by fitting a (penalized) regression model
+on the predictions of the individual models on the complete
+data. The motivation behind \code{parboost} is to offer a
+boosting framework that is as easy to parallelize and thus
+scalable as random forests.
 
-  If you want to modify the boosting parameters, please
-  take a look at the \code{\link{mboost}} package
-  documentation and pass the appropriate parameters to
-  \code{tree_control} and \code{boost_control}.
+If you want to modify the boosting parameters, please take
+a look at the \code{\link{mboost}} package documentation
+and pass the appropriate parameters to \code{tree_control}
+and \code{boost_control}.
 }
 \examples{
-## Run parboost on a cluster
-data(friedman2)
-library(parallel)
-cl <- makeCluster(2)
-parboost_model <- parboost(cluster_object = cl, data = friedman2,
-                           nsplits = 2, formula = y ~ .,
-                           baselearner="bbs", postprocessing = "glm",
-                           control = boost_control(mstop=10))
-stopCluster(cl)
-print(parboost_model)
-summary(parboost_model)
-head(predict(parboost_model))
-
-## Run parboost serially for testing/debugging purposes
-parboost_model <- parboost(data = friedman2, nsplits = 2, formula
-= y ~ ., baselearner="bbs", postprocessing = "glm", control =
-boost_control(mstop=10))
+## Run parboost on a cluster (example not run)
+# data(friedman2)
+# library(parallel)
+# cl <- makeCluster(2)
+# parboost_model <- parboost(cluster_object = cl, data = friedman2,
+#                            nsplits = 2, formula = y ~ .,
+#                            baselearner="bbs", postprocessing = "glm",
+#                            control = boost_control(mstop=10))
+# stopCluster(cl)
+# print(parboost_model)
+# summary(parboost_model)
+# head(predict(parboost_model))
+#
+# ## Run parboost serially for testing/debugging purposes
+# parboost_model <- parboost(data = friedman2, nsplits = 2, formula
+# = y ~ ., baselearner="bbs", postprocessing = "glm", control =
+# boost_control(mstop=10))
 }
 \author{
-  Ronert Obst
+Ronert Obst
 }
 \references{
-  Peter Buehlmann and Bin Yu (2003), Boosting with the L2
-  loss: regression and classification. \emph{Journal of the
-  American Statistical Association}, \bold{98}, 324--339.
+Peter Buehlmann and Bin Yu (2003), Boosting with the L2
+loss: regression and classification. \emph{Journal of the
+American Statistical Association}, \bold{98}, 324--339.
 
-  Peter Buehlmann and Torsten Hothorn (2007), Boosting
-  algorithms: regularization, prediction and model fitting.
-  \emph{Statistical Science}, \bold{22}(4), 477--505.
+Peter Buehlmann and Torsten Hothorn (2007), Boosting
+algorithms: regularization, prediction and model fitting.
+\emph{Statistical Science}, \bold{22}(4), 477--505.
 
-  Torsten Hothorn, Peter Buehlmann, Thomas Kneib, Mattthias
-  Schmid and Benjamin Hofner (2010), Model-based Boosting
-  2.0. \emph{Journal of Machine Learning Research},
-  \bold{11}, 2109--2113.
+Torsten Hothorn, Peter Buehlmann, Thomas Kneib, Mattthias
+Schmid and Benjamin Hofner (2010), Model-based Boosting
+2.0. \emph{Journal of Machine Learning Research},
+\bold{11}, 2109--2113.
 
-  Yoav Freund and Robert E. Schapire (1996), Experiments
-  with a new boosting algorithm. In \emph{Machine Learning:
-  Proc. Thirteenth International Conference}, 148--156.
+Yoav Freund and Robert E. Schapire (1996), Experiments with
+a new boosting algorithm. In \emph{Machine Learning: Proc.
+Thirteenth International Conference}, 148--156.
 
-  Jerome H. Friedman (2001), Greedy function approximation:
-  A gradient boosting machine. \emph{The Annals of
-  Statistics}, \bold{29}, 1189--1232.
+Jerome H. Friedman (2001), Greedy function approximation: A
+gradient boosting machine. \emph{The Annals of Statistics},
+\bold{29}, 1189--1232.
 
-  Benjamin Hofner, Andreas Mayr, Nikolay Robinzonov and
-  Matthias Schmid (2012). Model-based Boosting in R: A
-  Hands-on Tutorial Using the R Package mboost.
-  \emph{Department of Statistics, Technical Report No.
-  120}.\cr \url{http://epub.ub.uni-muenchen.de/12754/}
+Benjamin Hofner, Andreas Mayr, Nikolay Robinzonov and
+Matthias Schmid (2012). Model-based Boosting in R: A
+Hands-on Tutorial Using the R Package mboost.
+\emph{Department of Statistics, Technical Report No.
+120}.\cr \url{http://epub.ub.uni-muenchen.de/12754/}
 
-  T. Hothorn, P. Buehlmann, T. Kneib, M. Schmid, and B.
-  Hofner (2013). mboost: Model-Based Boosting, R package
-  version 2.2-3,
-  \url{http://CRAN.R-project.org/package=mboost}.
+T. Hothorn, P. Buehlmann, T. Kneib, M. Schmid, and B.
+Hofner (2013). mboost: Model-Based Boosting, R package
+version 2.2-3,
+\url{http://CRAN.R-project.org/package=mboost}.
 }
 
