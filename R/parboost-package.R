@@ -21,7 +21,8 @@
 ##' @import parallel iterators
 ##' @importFrom doParallel registerDoParallel
 ##' @importFrom glmnet cv.glmnet
-##' @importFrom mboost mboost blackboost selected
+##' @importFrom mboost mboost blackboost selected mstop boost_control
+##' Gaussian Binomial Poisson
 ##' @importFrom plyr laply
 ##' @importFrom party ctree_control
 ##' @importFrom caret createResample createFolds

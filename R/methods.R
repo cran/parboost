@@ -1,4 +1,12 @@
-##' @S3method print parboost
+##' Print a parboost object
+##'
+##' Prints a basic description of a parboost object
+##' @title Prints a short description of a parboost object.
+##' @param x a parboost object.
+##' @param ... Additional arguements passed to callies.
+##' @return Prints a short descritpion of a parboost object.
+##' @author Ronert Obst
+##' @export
 print.parboost <- function(x, ...) {
 
     cat("\n")
@@ -25,7 +33,15 @@ print.parboost <- function(x, ...) {
     invisible(x)
 }
 
-##' @S3method summary parboost
+##' Print a summary of a parboost object
+##'
+##' Prints a basic summary of a parboost object
+##' @title Prints a summary of a parboost object.
+##' @param object a parboost object.
+##' @param ... Additional arguements passed to callies.
+##' @return Prints a summary of a parboost object.
+##' @author Ronert Obst
+##' @export
 summary.parboost <- function(object, ...) {
 
     ret <- list(object = object, selprob = NULL)
@@ -43,7 +59,15 @@ summary.parboost <- function(object, ...) {
     return(ret)
 }
 
-##' @S3method print summary.parboost
+##' Print a summary of a parboost object
+##'
+##' Prints a basic summary of a parboost object
+##' @title Prints a summary of a parboost object.
+##' @param x a parboost object.
+##' @param ... Additional arguements passed to callies.
+##' @return Prints a summary of a parboost object.
+##' @author Ronert Obst
+##' @export
 print.summary.parboost <- function(x, ...) {
     print(x$object)
     cat("Selection frequencies:\n")
@@ -66,7 +90,6 @@ print.summary.parboost <- function(x, ...) {
 ##' @param ... Additional parameters passed to predict.mboost.
 ##' @return Numeric vector of fitted values
 ##' @author Ronert Obst
-##' @method predict parboost
 ##' @references T. Hothorn, P. Buehlmann, T. Kneib, M. Schmid, and
 ##' B. Hofner (2013). mboost: Model-Based Boosting, R package version
 ##' 2.2-3, \url{http://CRAN.R-project.org/package=mboost}.
@@ -111,10 +134,10 @@ predict.parboost <- function(object, newdata=NULL, type = c("response", "link"),
 ##' @param ... Additional arguements passed to callies.
 ##' @return Returns a list of coefficients
 ##' @author Ronert Obst
-##' @method coef parboost
 ##' @references T. Hothorn, P. Buehlmann, T. Kneib, M. Schmid, and
 ##' B. Hofner (2013). mboost: Model-Based Boosting, R package version
 ##' 2.2-3, http://CRAN.R-project.org/package=mboost.
+##' @method coef parboost
 ##' @export
 coef.parboost <- function(object, which = NULL,
                           aggregate = c("sum", "cumsum", "none"), ...) {
@@ -162,7 +185,6 @@ coef.parboost <- function(object, which = NULL,
 ##' @param ... Parameters passed to selected.mboost
 ##' @return Numeric vector of selected base learners.
 ##' @author Ronert Obst
-##' @method selected parboost
 ##' @references T. Hothorn, P. Buehlmann, T. Kneib, M. Schmid, and
 ##' B. Hofner (2013). mboost: Model-Based Boosting, R package version
 ##' 2.2-3, \url{http://CRAN.R-project.org/package=mboost}.

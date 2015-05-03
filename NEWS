@@ -19,3 +19,8 @@ parboost 0.1.3
 
 * Complying with CRAN policy to not use more than
   two cores for examples
+
+parboost 0.1.4
+===========
+
+* Added CITATION file and fixed missing documentation
